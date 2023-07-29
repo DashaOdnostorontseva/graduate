@@ -1,0 +1,120 @@
+{% extends 'documents/base.html' %}
+{% load static %}
+
+  
+{% block scripts %}
+  <title>Подписание документа</title>
+  <script language="javascript" src= {% static "js/Code.js" %}></script>
+  <script language="javascript" src={% static "js/cadesplugin_api.js" %}></script>
+  <script language="javascript" src={% static "js/async_code.js" %}></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+{% endblock %}
+
+{% block menu %}
+  <div class="btn-group">
+    <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Вы вошли под именем {{ user.get_short_name }}</button>
+    <ul class="dropdown-menu dropdown-menu-end">
+        <li><a class="dropdown-item" href="{% url 'myp' %}">Отправить документ</a></li>
+        <li><a class="dropdown-item" href="{% url 'mydocs' %}">Мои документы</a></li>
+        <li><a class="dropdown-item" href="{% url 'my_cert' %}">Мои сертификаты</a></li>
+        <li><a class="dropdown-item" href="{% url 'logout'%}?next={{request.path}}">Выйти</a></li>
+    </ul>
+  </div>
+{% endblock %}
+
+{% block table %} 
+
+{% if user.is_authenticated %}
+
+  <div class="choosedoc">
+    <form method="POST" action="{% url 'myp' %}" id="podpis-form">
+    
+      {% csrf_token %}
+
+      <div class="input-group mb-3">
+        <input type="text" name="name" class="form-control" placeholder="Введите наименование документа, например: Протокол совещания" aria-label="Recipient's username" aria-describedby="basic-addon2">
+      </div>
+
+      <div class="input-group mb-3">
+        <input type="text" name="number" class="form-control" placeholder="Введите номер документа (Данное поле не обязательно для заполнения)" aria-label="Recipient's username" aria-describedby="basic-addon2">
+      </div>
+
+      <div class="mb-3">
+        <label for="date_document">Укажите дату документа</label><br>
+        <input type="date" id="date_document" name="date_document" class="form-control" placeholder='date' aria-label="Recipient's username" aria-describedby="basic-addon2"/>
+      </div>
+      
+      <div class="input-group">
+        <input type="file" id="uploadFile" class="form-control" name="doc" placeholder="Выберите файл" aria-describedby="inputGroupFileAddon04" aria-label="Upload"
+        style="margin: 10px;"> 
+      </div>
+      
+      <select name="inboxer" class="form-select" aria-label="Default select example">
+        <option selected>Выберите получателя</option>
+        {% for user in users %}
+        <option value="{{ user.id }}">{{ user.username }}</option>
+        {% endfor %} 
+      </select>
+
+      <select id="CertName" class="form-select" aria-label="Default select example" style="display: block; 
+                                                                                    margin: 15px 0; 
+                                                                                    margin-left: auto; 
+                                                                                    margin-right: auto; 
+                                                                                    padding: 10px 10px 10px 10px; 
+                                                                                    background-color: #b3e8e2; 
+                                                                                    border: none;
+                                                                                    border-radius: 5px;">
+      <option value="">Выберите сертификат для подписания</option>
+      </select>
+      <input type="submit" value="Подписать и отправить" class="btn btn-primary">
+      <button class="btn btn-primary" id="singleSubmit">Отправить</button>
+    </form>
+  </div> 
+  
+  <div class="myconts">
+    <div class="modal fade" id="singleSumbitSuccessModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Документ успешно отправлен</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            Спасибо! Ваш документ был успешно отправлен
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="saveModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Сохранение файла</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">Документ успешно подписан и отправлен получателю. Желаете ли вы сохранить подписанный файл на свой компьютер?</div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" id="saveFileButton">Сохранить</button>
+            <button type="button" class="btn btn-primary" id="dontSaveFileButton">Не сохранять</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  {% else %}
+
+  <div class="myconts">Для работы с данным разделом необходимо <a href = "{% url 'login' %}" style="color:#7B68EE"> войти </a> </div>
+
+  {% endif %}
+    
+{% endblock %}
+
+{% block list %}
+  <script language="javascript" src={% static "js/signing.js" %}></script>
+  <script language="javascript" src={% static "js/jszip.min.js" %}></script> 
+  <script language="javascript" src={% static "js/FileSaver.min.js" %}></script> 
+{% endblock %}
+
+

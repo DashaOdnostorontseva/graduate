@@ -1,0 +1,81 @@
+{% extends 'documents/base.html' %}
+{% load static %}
+
+  
+{% block scripts %}
+  <title>Мои документы</title>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+  
+{% endblock %}
+
+{% block menu %}
+    <div class="btn-group">
+        <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Вы вошли под именем {{ user.get_short_name }}</button>
+        <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" href="{% url 'myp' %}">Отправить документ</a></li>
+            <li><a class="dropdown-item" href="{% url 'mydocs' %}">Мои документы</a></li>
+            <li><a class="dropdown-item" href="{% url 'my_cert' %}">Мои сертификаты</a></li>
+            <li><a class="dropdown-item" href="{% url 'logout'%}?next={{request.path}}">Выйти</a></li>
+        </ul>
+    </div>
+{% endblock %}
+
+{% block table %} 
+
+{% if user.is_authenticated %}
+
+    <div class="mydocs">
+        <table>
+        <tr>
+            <th>Наименование документа</th>
+            <th>Номер документа</th>
+            <th>Дата документа</th>
+            <th>Дата отправки документа</th>
+            <th>Статус документа</th>
+            <th>Посмотреть документ</th>
+            <th>Отправитель</th>
+            <th>Получатель</th>
+        </tr>
+        {% for doc in docsSend %}
+        <tr>
+            <td id="{{ doc.name }}">{{ doc.name }}</td>
+            <td id="{{ doc.number }}">{{ doc.number }}</td>
+            <td id="{{ doc.date_document }}">{{ doc.date_document }}</td>
+            <td id="{{ doc.date_send }}">{{ doc.date_send }}</td>
+            <td id="{{ doc.status }}"><a href = "{% url 'status' doc.id %}">{{ doc.status }}</a></td>
+            <td id="{{ doc.doc }}">{{ doc.doc }}</td>
+            <td id="{{ doc.sender }}">{{ doc.sender }}</td>
+            <td id="{{ doc.inboxer }}">{{ doc.inboxer }}</td>
+        </tr>
+        {% endfor %} 
+
+        {% for doc in docsInbox %}
+        <tr>
+            <td id="{{ doc.name }}">{{ doc.name }}</td>
+            <td id="{{ doc.number }}">{{ doc.number }}</td>
+            <td id="{{ doc.date_document }}">{{ doc.date_document }}</td>
+            <td id="{{ doc.date_send }}">{{ doc.date_send }}</td>
+            <td id="{{ doc.status }}"><a href = "{% url 'status' doc.id %}">{{ doc.status }}</a></td>
+            <td id="{{ doc.doc }}">{{ doc.doc }}</td>
+            <td id="{{ doc.sender }}">{{ doc.sender }}</td>
+            <td id="{{ doc.inboxer }}">{{ doc.inboxer }}</td>
+        </tr>
+        {% endfor %} 
+        
+        </table> 
+    </div>
+
+{% else %}
+
+    <div class="myconts">Для работы с данным разделом необходимо <a href = "{% url 'login' %}" style="color:#7B68EE"> войти </a> </div>
+
+{% endif %}
+    
+{% endblock %}
+
+{% block list %}
+    <script language="javascript" src={% static "js/jszip.min.js" %}></script> 
+    <script language="javascript" src={% static "js/FileSaver.min.js" %}></script> 
+{% endblock %}
+
+

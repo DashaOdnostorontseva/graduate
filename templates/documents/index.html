@@ -1,0 +1,10 @@
+{% extends 'documents/base.html' %}
+{% load static %}
+
+                {% block menu %}
+                <div class="header__item headerButton"><a href="{% url 'login' %}">Войти</a></div>
+                <div class="header__item headerButton"><a href="{% url 'registration' %}">Регистрация</a></div>
+                {% endblock %}
+
+
+{% load static %}
