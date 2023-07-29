@@ -1,0 +1,43 @@
+{% extends 'documents/base.html' %}
+{% load static %}
+
+                {% block menu %}
+                <div class="header__item headerButton"><a href="{% url 'registration' %}">Регистрация</a></div>
+                {% endblock %}
+
+        {% block table %}
+        <div class="formreg-center">
+            <form actttion="{% url 'login' %}" method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="{{ form.username.id_for_lable }}" class="form-label">Логин</label>
+                    {{ form.username }}
+                <div id="emailHelp" class="form-text">Введите логин, указанный при регистрации</div>
+                </div>
+                <div class="mb-3">
+                    <label for="{{ form.password.id_for_lable }}" class="form-label">Пароль</label>
+                    {{ form.password }}
+                </div>
+                <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                <label class="form-check-label" for="exampleCheck1">Запомнить меня</label>
+                </div>
+                {% if messages or form.non_field_errors %}
+                <div id='emailHelp' class="form-text" style="color: red">
+                {% if messages %}
+                    {% for message in messages %}
+                        {{ message }}
+                    {% endfor %}
+                {% else %}
+
+                {{ form.non_field_errors }}
+                </div>
+                {% endif %}
+                {% endif %}
+                <button type="submit" class="btn btn-primary">Войти</button>
+            </form>
+        </div>
+{% endblock %}
+</body>
+
+</html>

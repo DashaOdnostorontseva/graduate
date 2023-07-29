@@ -1,0 +1,57 @@
+{% extends 'documents/base.html' %}
+{% load static %}
+
+                {% block menu %}
+                <div class="header__item headerButton"><a href="{% url 'login' %}">Войти</a></div>
+                {% endblock %}
+
+        {% block table %}
+        <div class="formreg-center">
+
+            <form action="{% url 'registration' %}" method = 'post'>
+                {% csrf_token %}
+                <div class="mb-3">
+                <label for="{{ form.first_name.id_for_lable }}" class="form-label">Ваше имя</label>
+                {{ form.first_name }}
+                </div>
+                <div class="mb-3">
+                <label for="{{ form.last_name.id_for_lable }}" class="form-label">Ваша фамилия</label>
+                {{ form.last_name }}
+                </div>
+                <div class="mb-3">
+                <label for="{{ form.email.id_for_lable }}" class="form-label">Email</label>
+                {{ form.email }}
+                </div>
+                <div class="mb-3">
+                    <label for="{{ form.username.id_for_lable }}" class="form-label">Ваш логин</label>
+                    {{ form.username }}
+                </div>
+                <div class="mb-3">
+                    <label for="{{ form.INN.id_for_lable }}" class="form-label">Ваш ИНН</label>
+                    {{ form.INN }}
+                </div>
+                <div class="mb-3">
+                    <label for="{{ form.password.id_for_lable }}" class="form-label">Введите пароль</label>
+                    {{ form.password }} 
+                </div> 
+                <div class="mb-3">
+                    <label for="{{ form.password1.id_for_lable }}" class="form-label">Повторите пароль</label>
+                    {{ form.password1 }}
+                </div>
+                <div class="mb-3">
+                    <label for="{{ form.password2.id_for_lable }}" class="form-label">Еще раз повторите пароль</label>
+                    {{ form.password2 }}
+                </div>
+                {% if form.errors %}
+                <div id='emailHelp' class="form-text" style="color: red">
+                {{ form.errors }}
+                </div>
+
+                {% endif %}
+                <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+            </form>
+        </div>
+{% endblock %}
+</body>
+
+</html>
